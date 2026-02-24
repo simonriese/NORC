@@ -71,7 +71,7 @@ This will run all measurements in the experiment `N` times and open the job trac
 
 ### Setup for analyzing the results
 
-For analyzing the results, we provide a python package which can be simply installed using pip:
+For analyzing the results, we provide a Python package which can be simply installed using pip:
 
 ```bash
 cd analysis
@@ -80,12 +80,12 @@ pip install .
 
 ### tdlr;
 ```bash
-git clone https://github.com/tuda-parallel/NORHC.git
-cd NORHC
+git clone https://github.com/tuda-parallel/NORC.git
+cd NORC
 cd acquisition
 ./install.sh
 
-# Once the interactive setups completes 
+# Once the interactive setup completes 
 # install the analysis components
 cd ../analysis
 pip install .
@@ -100,7 +100,7 @@ cd ../acquisition
 
 ## Analyzing the Results
 
-Instructions on how to analyze the results are provided [here](analysis/README.md).
+Instructions for analyzing the results are provided [here](analysis/README.md).
 
 ## Contributing
 
