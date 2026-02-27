@@ -1,12 +1,15 @@
-# Data acquisition script for omp_loop.sh in the NORC performance measurement pipeline.
-#
-# Copyright (c) 2026 TU Darmstadt, Germany
-# Version: v0.2
-# Date: 2025-08-08
-#
-# Licensed under the BSD 3-Clause License.
-# For more information, see the LICENSE file in the project root:
-# https://github.com/tuda-parallel/NORC/blob/main/LICENSE
+# Batch prefixes from system and benchmark go here.
+#SBATCH --partition=§partition
+#SBATCH --account=§budget
+#SBATCH --job-name=NORC(§partition)
+#SBATCH --output=§status_out/%j.out
+#SBATCH --error=§status_err/%j.err
+#SBATCH --nodes §nodes
+#SBATCH --ntasks-per-node §total_tasks
+#SBATCH --exclusive
+#SBATCH --time §time
+#SBATCH --mem 0  # We have exclusive access so use all memory available
+
 next_job_step=0
 noigena_job_step=""
 

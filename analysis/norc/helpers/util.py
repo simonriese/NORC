@@ -68,7 +68,8 @@ class measurement_info:
     def noiseless_key(self):
         return (self.benchmark, self.system, "NO_NOISE", self.counter)
 
-    def from_key(self, k):
+    @staticmethod
+    def from_key(k):
         info = measurement_info()
         info.benchmark = k[0]
         info.system = k[1]
@@ -261,10 +262,10 @@ def write_measurement(destination, obj):
 def iterate_measurements(root):
     inf = dir_info()
 
-    def flt_isdir(f):
+    def flt(f):
         return os.path.isdir(f) and not f.name.startswith(".")
 
-    for benchmark in filter(flt_isdir, os.scandir(root)):
+    for benchmark in filter(flt, os.scandir(root)):
         inf.benchmark = benchmark.name
         for system in filter(flt, os.scandir(benchmark)):
             inf.system = system.name

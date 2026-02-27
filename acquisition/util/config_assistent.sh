@@ -1,4 +1,5 @@
 #!/bin/bash
+#set -x
 # Data acquisition script for config_assistent.sh in the NORC performance measurement pipeline.
 #
 # Copyright (c) 2026 TU Darmstadt, Germany

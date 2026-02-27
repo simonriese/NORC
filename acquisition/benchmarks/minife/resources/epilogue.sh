@@ -1,5 +1,5 @@
 #!/bin/bash
-# Data acquisition script for epilogue.sh in the NORC performance measurement pipeline.
+# Many runs of MiniFE clutter the output directory with run info files.
 #
 # Copyright (c) 2026 TU Darmstadt, Germany
 # Version: v0.2

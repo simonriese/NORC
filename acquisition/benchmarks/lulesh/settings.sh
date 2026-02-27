@@ -1,4 +1,7 @@
-# Data acquisition script for settings.sh in the NORC performance measurement pipeline.
+# This configuration file contains all settings for this benchmark.
+# Initial time estimate for a single run of this benchmark.
+# The runner may refine this for different settings depending on measured run times.
+# It is recommended to estimate this generously at first.
 #
 # Copyright (c) 2026 TU Darmstadt, Germany
 # Version: v0.2

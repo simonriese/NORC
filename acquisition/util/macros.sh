@@ -1,5 +1,5 @@
 #!/bin/bash
-# Data acquisition script for macros.sh in the NORC performance measurement pipeline.
+# Ignore any user locale settings
 #
 # Copyright (c) 2026 TU Darmstadt, Germany
 # Version: v0.2

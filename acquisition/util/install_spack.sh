@@ -1,6 +1,9 @@
 #!/bin/bash
 # Data acquisition script for install_spack.sh in the NORC performance measurement pipeline.
+# This needs to be sourced to have any effect
 #
+# Spack doesn't require building so it can just be cloned into the build directory
+# 
 # Copyright (c) 2026 TU Darmstadt, Germany
 # Version: v0.2
 # Date: 2025-08-08

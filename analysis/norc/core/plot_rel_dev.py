@@ -385,7 +385,12 @@ def plot_all(experiment_dir, settings: plot_settings):
         if noise_indices[key[2]] != 0:
             continue
         bb = ax.bbox.get_points()
-        axh = bb[1][1] - bb[0][1]
+        axx, axy, axw, axh = (
+            bb[0][0],
+            bb[0][1],
+            bb[1][0] - bb[0][0],
+            bb[1][1] - bb[0][1],
+        )
         ax.annotate(
             key[1],
             xy=(0.5, 1.0 + ((settings.font_size * 2) / axh)),
