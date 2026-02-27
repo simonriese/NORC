@@ -1,28 +1,18 @@
-"""
-Calculation of noise resilience scores and metric rankings.
-
-Copyright (c) 2026 TU Darmstadt, Germany
-Version: v0.2
-Date: 2025-08-08
-
-Licensed under the BSD 3-Clause License.
-For more information, see the LICENSE file in the project root:
-https://github.com/tuda-parallel/NORC/blob/main/LICENSE
-"""
-
-import argparse
-import os
+# This file is part of the NORC software
+#
+# Copyright (c) 2024-2025, Technical University of Darmstadt, Germany
+#
+# This software may be modified and distributed under the terms of a BSD-style license.
+# See the LICENSE file in the base directory for details.
 
 import numpy as np
+import sys
+import os
+import argparse
+
 from tqdm import tqdm
 
-from norc.helpers.util import (
-    available_measurements,
-    data_selection,
-    load_measurement,
-    measurement_info,
-    warn,
-)
+from norc.helpers.util import data_selection, measurement_info, available_measurements, warn, load_measurement
 
 
 # Summarized deviation and susceptibility scores
@@ -90,7 +80,7 @@ def deviation_score_from_data(visits, contribution, deviation, selection: data_s
     # Total contribution of measurements used for the score.
     # Used for scaling to compensate for cutoff loss.
     total_contribution = 0.0
-    for vis, contrib, devs in zip(visits, contribution, deviation, strict=False):
+    for vis, contrib, devs in zip(visits, contribution, deviation):
         if vis >= selection.visit_threshold and contrib >= selection.contrib_threshold:
             score += contrib * np.sum(devs) / len(devs)
             total_contribution += contrib
@@ -146,17 +136,17 @@ def sensitivity_score(
         return np.inf
 
     def mu_sigma_sq(dev, con):
-        sum_val = 0.0
+        sum = 0.0
         total_contrib = 0.0
-        for d, c in zip(dev, con, strict=False):
-            sum_val += np.sum(d) / len(d) * c
+        for d, c in zip(dev, con):
+            sum += np.sum(d) / len(d) * c
             total_contrib += c
-        mu = sum_val / total_contrib
+        mu = sum / total_contrib
 
-        sum_val = 0.0
-        for d, c in zip(dev, con, strict=False):
-            sum_val += np.sum([(x - mu) ** 2 for x in d]) / len(d) * c
-        sigma_sq = sum_val / total_contrib
+        sum = 0.0
+        for d, c in zip(dev, con):
+            sum += np.sum([(x - mu) ** 2 for x in d]) / len(d) * c
+        sigma_sq = sum / total_contrib
         return mu, sigma_sq
 
     mu_noisy, sigma_sq_noisy = mu_sigma_sq(noisy_dev, noisy_con)
@@ -195,13 +185,10 @@ def print_tabular(scores, selection):
     print("  \\begin{tabular}{lllll}")
     print("    Rank & Counter & Relative Resilience & Deviation & Susceptibility\\\\\\hline")
 
-    def cellv(x):
-        return "\\(" + ("-" if np.isinf(x) else f"{x:.4f}") + "\\)"
+    cellv = lambda x: "\\(" + ("-" if np.isinf(x) else f"{x:.4f}") + "\\)"
 
     place = 1
-    for key, sc in sorted(
-        scores.items(), key=lambda it: it[1].rel_resilience, reverse=True
-    ):
+    for key, sc in sorted(scores.items(), key=lambda it: it[1].rel_resilience, reverse=True):
         info = measurement_info.from_key(key)
         counter = info.counter.replace("_", "\\_")
         print(
@@ -209,9 +196,7 @@ def print_tabular(scores, selection):
         )
         place += 1
     print("  \\hline\\end{tabular}")
-    print(
-        f"  \\caption{{min. contribution: {selection.contrib_threshold}%, min. visits: {selection.visit_threshold}}}"
-    )
+    print(f"  \\caption{{min. contribution: {selection.contrib_threshold}%, min. visits: {selection.visit_threshold}}}")
     print("\\end{table}")
 
 
@@ -251,9 +236,7 @@ def main() -> None:
 
     noisy = {}
     ref = {}
-    for info in available_measurements(
-        os.path.join(args.experiment_root, "result", ".deviations"), selection
-    ).values():
+    for info in available_measurements(os.path.join(args.experiment_root, "result", ".deviations"), selection).values():
         key = info.key()
         if info.noise_pattern == "NO_NOISE":
             ref[key] = info

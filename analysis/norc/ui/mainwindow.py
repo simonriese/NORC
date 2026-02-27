@@ -1,25 +1,20 @@
-"""
-Main window implementation for the NORC GUI.
-
-Copyright (c) 2026 TU Darmstadt, Germany
-Version: v0.2
-Date: 2025-08-08
-
-Licensed under the BSD 3-Clause License.
-For more information, see the LICENSE file in the project root:
-https://github.com/tuda-parallel/NORC/blob/main/LICENSE
-"""
+# This file is part of the NORC software
+#
+# Copyright (c) 2024-2025, Technical University of Darmstadt, Germany
+#
+# This software may be modified and distributed under the terms of a BSD-style license.
+# See the LICENSE file in the base directory for details.
 
 import os
 from copy import copy
 
+from PySide6.QtWidgets import QFileDialog, QMessageBox, QMainWindow, QCheckBox
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QCheckBox, QFileDialog, QMainWindow, QMessageBox
 
-from norc.core.analyze import analyze_experiment
-from norc.helpers.util import available_measurements, experiment_filter
+from norc.helpers.util import experiment_filter, available_measurements
 from norc.ui.examine_tab import examine_tab
 from norc.ui.ratings_tab import ratings_tab
+from norc.core.analyze import analyze_experiment
 from norc.ui.ui_util import add_v_spacer, clear_widget
 
 
@@ -172,28 +167,28 @@ class main_window(QMainWindow):
         self.ui.pg_flt_noise.setVisible(len(noises) > 1)
         self.ui.pg_flt_metric.setVisible(len(metrics) > 1)
 
-        for it in sorted(benchmarks):
+        for it in sorted(list(benchmarks)):
             cb = QCheckBox(it, self)
             cb.setChecked(plt_mgr.plot_settings.selection.filter.flt_benchmark(it))
             cb.stateChanged.connect(self.apply_filters)
             self.ui.pg_flt_benchmark.layout().addWidget(cb)
             self.filter_boxes["benchmark"].append(cb)
 
-        for it in sorted(systems):
+        for it in sorted(list(systems)):
             cb = QCheckBox(it, self)
             cb.setChecked(plt_mgr.plot_settings.selection.filter.flt_system(it))
             cb.stateChanged.connect(self.apply_filters)
             self.ui.pg_flt_system.layout().addWidget(cb)
             self.filter_boxes["system"].append(cb)
 
-        for it in sorted(noises):
+        for it in sorted(list(noises)):
             cb = QCheckBox(it, self)
             cb.setChecked(plt_mgr.plot_settings.selection.filter.flt_noise(it))
             cb.stateChanged.connect(self.apply_filters)
             self.ui.pg_flt_noise.layout().addWidget(cb)
             self.filter_boxes["noise"].append(cb)
 
-        for it in sorted(metrics):
+        for it in sorted(list(metrics)):
             cb = QCheckBox(it, self)
             cb.setChecked(plt_mgr.plot_settings.selection.filter.flt_counter(it))
             cb.stateChanged.connect(self.apply_filters)

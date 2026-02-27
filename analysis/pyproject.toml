@@ -77,9 +77,10 @@ norc_rank = "norc.core.score:main"
 # ]
 
 development-libs = [
-    "ruff",
+    "black",
+    "isort",
     "nbstripout",
-    "pytest",
+    #    "flake8"
 ]
 
 [project.gui-scripts]
@@ -95,10 +96,22 @@ log_cli_level = "INFO"
 log_cli_format = "%(asctime)s [%(levelname)8s] %(message)s (%(filename)s:%(lineno)s)"
 log_cli_date_format = "%Y-%m-%d %H:%M:%S"
 
-[tool.ruff]
-# Set the maximum line length to 90.
-line-length = 90
-target-version = "py311"
+[tool.black]
+line-length = 120
+target-version = ["py311"]
+skip-string-normalization = false
+
+[tool.isort]
+profile = "black"
+line_length = 90
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+
+[tool.flake8]
+max-line-length = 90
+extend-ignore = ["E203", "W503"]  # Black compatibility
 exclude = [
     ".git",
     "__pycache__",
@@ -106,37 +119,4 @@ exclude = [
     "dist",
     ".venv",
     "env",
-    "*.egg-info",
 ]
-
-[tool.ruff.lint]
-# Enable Pyflakes (`F`), pycodestyle (`E`, `W`), isort (`I`), 
-# flake8-bugbear (`B`), flake8-comprehensions (`C4`), 
-# pyupgrade (`UP`), and flake8-simplify (`SIM`).
-select = ["E", "F", "W", "I", "B", "C4", "UP", "SIM"]
-
-# List of rules to ignore
-ignore = [
-    "E501", # Line too long (formatter will handle this)
-    "E203", # Whitespace before ':' (Black compatibility)
-    "B008", # Do not perform function calls in argument defaults
-    "F403", # Star imports (from module import *)
-    "F405", # Star imports (undefined or defined from star imports)
-    "E722", # Do not use bare `except`
-    "UP031", # Use f-string instead of % formatting
-    "SIM108", # Use ternary operator instead of `if`-`else`-block (ignored for readability)
-    "SIM102", # Use a single `if` statement instead of nested `if` statements
-    "SIM113", # Use `enumerate` for index in `for` loops
-    "SIM115", # Use a context manager for opening files
-    "SIM101", # Use `a in (b, c)` instead of `a == b or a == c`
-    "SIM116", # Use a dictionary lookup instead of an `if`-`elif`-`else` chain
-    "F821", # Undefined name
-    "F811", # Redefinition of unused name
-    "B007", # Loop control variable not used within loop body
-    "E741", # Ambiguous variable name
-    "E402", # Module level import not at top of file
-]
-
-[tool.ruff.lint.isort]
-# Treat the following as a first-party module.
-known-first-party = ["norc"]

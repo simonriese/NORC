@@ -1,28 +1,24 @@
-"""
-Visualization of relative deviation measurements.
+# This file is part of the NORC software
+#
+# Copyright (c) 2024-2025, Technical University of Darmstadt, Germany
+#
+# This software may be modified and distributed under the terms of a BSD-style license.
+# See the LICENSE file in the base directory for details.
 
-Copyright (c) 2026 TU Darmstadt, Germany
-Version: v0.2
-Date: 2025-08-08
-
-Licensed under the BSD 3-Clause License.
-For more information, see the LICENSE file in the project root:
-https://github.com/tuda-parallel/NORC/blob/main/LICENSE
-"""
-
-import argparse
-import os
 import sys
+import os
+import argparse
 from concurrent.futures import ThreadPoolExecutor
 from copy import copy
 
-import numpy as np
+import norc.helpers.util as util
+import norc.core.score as scr
+
 from matplotlib import pyplot as plt
 from matplotlib import ticker
+import numpy as np
+import numpy.ma as ma
 from tqdm import tqdm
-
-import norc.core.score as scr
-import norc.helpers.util as util
 
 
 class plot_settings:
@@ -158,7 +154,7 @@ def prepare_plot(settings: plot_settings, p: util.measurement_info):
 
     ys = [np.zeros(0)] * settings.n_bands
 
-    for vis, contribution, deviation in zip(visits, contributions, deviations, strict=False):
+    for vis, contribution, deviation in zip(visits, contributions, deviations):
         if vis < settings.selection.visit_threshold or contribution < settings.selection.contrib_threshold:
             continue
 
@@ -200,7 +196,7 @@ def plot(ax: plt.Axes, c1: cached_plot, c2: cached_plot, settings: plot_settings
         plt.rcParams.update({"font.size": settings.font_size})
     max_y = max(c1.max_y, c2.max_y)
     for cache in [c1, c2]:
-        for contribution, y in zip(cache.contributions, cache.ys, strict=False):
+        for contribution, y in zip(cache.contributions, cache.ys):
             if len(y) == 0:
                 continue
 
@@ -256,6 +252,7 @@ def plot_all(experiment_dir, settings: plot_settings):
 
     # These establish global orderings within each figure
     benchmark_indices = util.sorted_index_map(unsorted_benchmarks)
+    system_indices = util.sorted_index_map(unsorted_systems)
     noise_indices = util.sorted_index_map(unsorted_noise)
     counter_indices = {}
 
@@ -274,18 +271,12 @@ def plot_all(experiment_dir, settings: plot_settings):
                 continue
             key = inf.key()
             scores[key] = scr.score(inf, lumped_infs[inf.noiseless_key()], sel)
-        scr.score_group(scores)
+        sgp = scr.score_group(scores)
         scores = {c: s for c, s in scores.items() if not np.isinf(s.rel_resilience)}
 
-        def sort_crit(it):
-            return it[1].rel_resilience
-
-        def access(it):
-            return lumped_infs[it[0]].counter
-
-        counter_indices = util.sorted_index_map(
-            scores.items(), key=sort_crit, reverse=False, elem_transform=access
-        )
+        sort_crit = lambda it: it[1].rel_resilience
+        access = lambda it: lumped_infs[it[0]].counter
+        counter_indices = util.sorted_index_map(scores.items(), key=sort_crit, reverse=False, elem_transform=access)
 
     else:
         counter_indices = util.sorted_index_map(unsorted_counters)
@@ -329,9 +320,7 @@ def plot_all(experiment_dir, settings: plot_settings):
         if p.counter not in counter_indices:
             continue
         part_idx = int(counter_indices[p.counter] / split_after)
-        counter_rows = (
-            split_after if part_idx < n_parts else len(counter_indices) % split_after
-        )
+        counter_rows = split_after if part_idx < n_parts else len(counter_indices) % split_after
         fig_height = settings.plot_height * (plot_rows * counter_rows) + vslack
         fig_id = (p.system, part_idx)
         ax_id = (p.system, p.benchmark, p.noise_pattern, part_idx)
@@ -361,11 +350,7 @@ def plot_all(experiment_dir, settings: plot_settings):
                 y * width + x + 1,
             )
 
-            counter_names = [
-                name
-                for name, idx in counter_indices.items()
-                if part_idx == int(idx / split_after)
-            ]
+            counter_names = [name for name, idx in counter_indices.items() if part_idx == int(idx / split_after)]
             setup_chart(ax, settings, p, p.noise_pattern, counter_names)
             if max_deviation <= 100:
                 ax.set_xlim(-settings.extended_zero_area, 100)

@@ -1,33 +1,28 @@
-"""
-Table component for displaying numerical scores and metrics.
+# This file is part of the NORC software
+#
+# Copyright (c) 2024-2025, Technical University of Darmstadt, Germany
+#
+# This software may be modified and distributed under the terms of a BSD-style license.
+# See the LICENSE file in the base directory for details.
 
-Copyright (c) 2026 TU Darmstadt, Germany
-Version: v0.2
-Date: 2025-08-08
-
-Licensed under the BSD 3-Clause License.
-For more information, see the LICENSE file in the project root:
-https://github.com/tuda-parallel/NORC/blob/main/LICENSE
-"""
-
-import numpy as np
-from PySide6.QtCore import Signal
-from PySide6.QtGui import QColor
 from PySide6.QtWidgets import (
-    QHeaderView,
     QTableWidget,
     QTableWidgetItem,
+    QHeaderView,
 )
+from PySide6.QtGui import QColor
+from PySide6.QtCore import Signal, QTimer
+
+import matplotlib
+import numpy as np
 
 import norc.helpers.util as util
+from norc.ui.ui_util import score_color
 from norc.core.plotmanager import PlotManager
 from norc.ui.qt_utils import table_dimensions
-from norc.ui.ui_util import score_color
 
 
 class score_cell(QTableWidgetItem):
-    selected = Signal(util.measurement_info)
-
     def __init__(self, plt_mgr: PlotManager, info: util.measurement_info):
         super().__init__()
 
@@ -36,7 +31,6 @@ class score_cell(QTableWidgetItem):
 
         self.setText("-")
 
-        self.plt_mgr.score_ready.connect(self.handle_result)
         self.update_score()
 
     def set_bg(self, color: QColor):
@@ -56,10 +50,6 @@ class score_cell(QTableWidgetItem):
         color = score_color(score.rel_resilience)
         self.set_bg(QColor(color[0] * 255, color[1] * 255, color[2] * 255))
 
-    def handle_result(self, a: util.measurement_info):
-        # No need to check if it's the right score as all scores can affect the relative rating;
-        self.update_score()
-
 
 class score_table(QTableWidget):
     info_selected = Signal(util.measurement_info)
@@ -71,12 +61,33 @@ class score_table(QTableWidget):
         self.outer_dims = ["Benchmark", "System"]
         self.inner_dims = ["Counter", "Noise"]
 
+        self.update_timer = QTimer(self)
+        self.update_timer.setSingleShot(True)
+        self.update_timer.setInterval(200)  # Debounce updates to 5 times per second
+        self.update_timer.timeout.connect(self.update_scores)
+
         self.plt_mgr.reconfigured.connect(self.update_table)
+        self.plt_mgr.score_ready.connect(self.trigger_update)
 
         self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
         self.update_table()
+
+    def trigger_update(self, _):
+        if not self.update_timer.isActive():
+            self.update_timer.start()
+
+    def update_scores(self):
+        for ocol in range(self.columnCount()):
+            for orow in range(self.rowCount()):
+                table = self.cellWidget(orow, ocol)
+                if isinstance(table, QTableWidget):
+                    for icol in range(table.columnCount()):
+                        for irow in range(table.rowCount()):
+                            item = table.item(irow, icol)
+                            if isinstance(item, score_cell):
+                                item.update_score()
 
     def set_dimensions(self, orow: str, ocol: str, irow: str, icol: str):
         self.outer_dims = [ocol, orow]

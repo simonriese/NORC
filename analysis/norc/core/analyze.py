@@ -1,35 +1,21 @@
-"""
-Core analysis logic for evaluating noise resilience from Cubex files.
-
-Copyright (c) 2026 TU Darmstadt, Germany
-Version: v0.2
-Date: 2025-08-08
-
-Licensed under the BSD 3-Clause License.
-For more information, see the LICENSE file in the project root:
-https://github.com/tuda-parallel/NORC/blob/main/LICENSE
-"""
+# This file is part of the NORC software
+#
+# Copyright (c) 2024-2025, Technical University of Darmstadt, Germany
+#
+# This software may be modified and distributed under the terms of a BSD-style license.
+# See the LICENSE file in the base directory for details.
 
 import os
-import shutil
 import sys
+import shutil
+import numpy as np
 from copy import copy
 
-import numpy as np
 from pycubexr import CubexParser
 from tqdm import tqdm
+from norc.helpers.util import dir_info, warn, iterate_measurements, callpath_data, write_measurement
 
-from norc.helpers.util import (
-    callpath_data,
-    dir_info,
-    iterate_measurements,
-    warn,
-    write_measurement,
-)
-
-
-def flt_isdir(f):
-    return f.is_dir() and not f.name.startswith(".")
+flt_isdir = lambda f: f.is_dir() and not f.name.startswith(".")
 
 
 def analyze(output_dir, info: dir_info):
@@ -62,7 +48,7 @@ def analyze(output_dir, info: dir_info):
                     skipped_name = 0
                     skipped_threadcount = 0
 
-                    def iterate_cnodes(cnode, path, metric_name=metric_name, metric_values=metric_values):
+                    def iterate_cnodes(cnode, path):
                         nonlocal total_callpaths
                         nonlocal skipped_name
                         nonlocal skipped_threadcount
@@ -112,8 +98,8 @@ def analyze(output_dir, info: dir_info):
 
         except KeyboardInterrupt:
             print("Exiting on keyboard interrupt")
-            sys.exit(0)
-        except Exception:
+            exit(0)
+        except:
             warn(f"Skipping {exdir}")
             continue
 
@@ -142,9 +128,7 @@ def analyze(output_dir, info: dir_info):
             total_mean += np.sum(mean)
 
             # Calculate the relative deviation from mean
-            for thread_mean, thread_vals in zip(
-                mean[non_zero_mask], np.transpose(values)[non_zero_mask], strict=False
-            ):
+            for thread_mean, thread_vals in zip(mean[non_zero_mask], np.transpose(values)[non_zero_mask]):
                 cpd.deviations += list(100 * abs(thread_vals - thread_mean) / thread_mean)
 
             # Callpaths are stored alongside their total mean from which the contribution can be calculated later

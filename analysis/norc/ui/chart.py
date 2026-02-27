@@ -1,44 +1,38 @@
-"""
-Custom chart components for visualizing analysis results in the GUI.
-
-Copyright (c) 2026 TU Darmstadt, Germany
-Version: v0.2
-Date: 2025-08-08
-
-Licensed under the BSD 3-Clause License.
-For more information, see the LICENSE file in the project root:
-https://github.com/tuda-parallel/NORC/blob/main/LICENSE
-"""
+# This file is part of the NORC software
+#
+# Copyright (c) 2024-2025, Technical University of Darmstadt, Germany
+#
+# This software may be modified and distributed under the terms of a BSD-style license.
+# See the LICENSE file in the base directory for details.
 
 import matplotlib
 
 matplotlib.use("QtAgg")
 
-from matplotlib.backends.backend_qtagg import (
-    FigureCanvasQTAgg,
-)
-from matplotlib.backends.backend_qtagg import (
-    NavigationToolbar2QT as FigNavigation,
-)
-from matplotlib.figure import Figure
 from PySide6.QtCore import Signal
-from PySide6.QtGui import QColor, Qt
+from PySide6.QtGui import Qt, QColor
 from PySide6.QtWidgets import (
-    QComboBox,
-    QFormLayout,
-    QLabel,
-    QSizePolicy,
+    QWidget,
     QSplitter,
     QVBoxLayout,
-    QWidget,
+    QFormLayout,
+    QComboBox,
+    QLabel,
+    QSizePolicy,
 )
 
-import norc.core.plot_rel_dev as prd
-import norc.core.score as scr
-import norc.helpers.util as util
-from norc.core.plotmanager import PlotManager
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_qtagg import (
+    FigureCanvasQTAgg,
+    NavigationToolbar2QT as FigNavigation,
+)
+
 from norc.ui.qt_utils import update_choices
 from norc.ui.ui_util import score_color
+import norc.helpers.util as util
+import norc.core.plot_rel_dev as prd
+import norc.core.score as scr
+from norc.core.plotmanager import PlotManager
 
 
 class chart_controls(QWidget):

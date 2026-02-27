@@ -1,20 +1,14 @@
-"""
-Utility functions and shared classes for NORC analysis and data processing.
+# This file is part of the NORC software
+#
+# Copyright (c) 2024-2025, Technical University of Darmstadt, Germany
+#
+# This software may be modified and distributed under the terms of a BSD-style license.
+# See the LICENSE file in the base directory for details.
 
-Copyright (c) 2026 TU Darmstadt, Germany
-Version: v0.2
-Date: 2025-08-08
-
-Licensed under the BSD 3-Clause License.
-For more information, see the LICENSE file in the project root:
-https://github.com/tuda-parallel/NORC/blob/main/LICENSE
-"""
-
-import copy
 import os
 import pickle
+import copy
 import re
-
 from matplotlib import ticker
 from termcolor import colored
 
@@ -68,8 +62,7 @@ class measurement_info:
     def noiseless_key(self):
         return (self.benchmark, self.system, "NO_NOISE", self.counter)
 
-    @staticmethod
-    def from_key(k):
+    def from_key(self, k):
         info = measurement_info()
         info.benchmark = k[0]
         info.system = k[1]
@@ -82,17 +75,8 @@ class experiment_filter:
     def __init__(self, benchmarks="", systems="", noise_patterns="", counters=""):
         def comma_separated_filter(items):
             if len(items) > 0:
-                item_list = items.split(",")
-
-                def check(x):
-                    return x in item_list
-
-                return check
-
-            def check_true(x):
-                return True
-
-            return check_true
+                return lambda x: x in items.split(",")
+            return lambda x: True
 
         # ALL_NOISE is loaded as its own result and should therefore be spared by the filters. Groupings will take care of it.
         if noise_patterns:
@@ -189,9 +173,7 @@ def sorted_index_map(l, key=None, reverse=False, elem_transform=lambda x: x):
 
 def available_measurements(experiment_dir, selection: data_selection):
     # Items can be excluded by prepending a ".".
-    def flt_is_pickle(f):
-        return f.name.endswith(".pickle") and not f.name.startswith(".")
-
+    flt_is_pickle = lambda f: f.name.endswith(".pickle") and not f.name.startswith(".")
     plt_infs = {}
     # f"{info.benchmark}.{info.params}.{info.noise_pattern}.{info.system}.{info.res_cfg}.{metric.name}.pickle"
     for meas in filter(flt_is_pickle, os.scandir(experiment_dir)):
@@ -262,9 +244,7 @@ def write_measurement(destination, obj):
 def iterate_measurements(root):
     inf = dir_info()
 
-    def flt(f):
-        return os.path.isdir(f) and not f.name.startswith(".")
-
+    flt = lambda f: os.path.isdir(f) and not f.name.startswith(".")
     for benchmark in filter(flt, os.scandir(root)):
         inf.benchmark = benchmark.name
         for system in filter(flt, os.scandir(benchmark)):
