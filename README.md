@@ -1,27 +1,21 @@
-<!-- # FTIO -->
-![GitHub Release](https://img.shields.io/github/v/release/tuda-parallel/NORC)
-![GitHub Release Date](https://img.shields.io/github/release-date/tuda-parallel/NORC)
-![](https://img.shields.io/github/last-commit/tuda-parallel/NORC)
-![contributors](https://img.shields.io/github/contributors/tuda-parallel/NORC)
-![issues](https://img.shields.io/github/issues/tuda-parallel/NORC)
-![](https://img.shields.io/github/languages/code-size/tuda-parallel/NORC)
-![](https://img.shields.io/github/languages/top/tuda-parallel/NORC)
-![license][license.badge]
-<!-- [![CI](https://github.com/tuda-parallel/NORC/actions/workflows/CI.yml/badge.svg)](https://github.com/tuda-parallel/NORC/actions/workflows/CI.yml) -->
-<!-- [![CD](https://github.com/tuda-parallel/NORC/actions/workflows/python-publish.yml/badge.svg)](https://github.com/tuda-parallel/NORC/actions/workflows/python-publish.yml) -->
-<!-- [![pypi](https://img.shields.io/pypi/status/ftio-hpc)](https://pypi.org/project/ftio-hpc/) -->
+<!-- # NORC -->
+[![GitHub Release](https://img.shields.io/github/v/release/tuda-parallel/NORC)](https://github.com/tuda-parallel/NORC/releases)
+[![GitHub Release Date](https://img.shields.io/github/release-date/tuda-parallel/NORC)](https://github.com/tuda-parallel/NORC/releases)
+[![Last Commit](https://img.shields.io/github/last-commit/tuda-parallel/NORC)](https://github.com/tuda-parallel/NORC/commits/main)
+[![Contributors](https://img.shields.io/github/contributors/tuda-parallel/NORC)](https://github.com/tuda-parallel/NORC/graphs/contributors)
+[![Issues](https://img.shields.io/github/issues/tuda-parallel/NORC)](https://github.com/tuda-parallel/NORC/issues)
+[![Code Size](https://img.shields.io/github/languages/code-size/tuda-parallel/NORC)](https://github.com/tuda-parallel/NORC)
+[![Top Language](https://img.shields.io/github/languages/top/tuda-parallel/NORC)](https://github.com/tuda-parallel/NORC)
+[![License][license.badge]](./LICENSE)
+[![CI](https://github.com/tuda-parallel/NORC/actions/workflows/CI.yml/badge.svg?branch=development)](https://github.com/tuda-parallel/NORC/actions/workflows/CI.yml)
 
 <br />
 <div align="center">
   <h1 align="center">NORC</h1>
   <p align="center">
  <h3 align="center"> Noise Resilient Hardware Counters in HPC</h2>
-    <!-- <br /> -->
-    <a href="https://github.com/tuda-parallel/FTIO/tree/main/docs/approach.md"><strong>Explore the approach »</strong></a>
+    <a href="doc/approach.md"><strong>Explore the approach »</strong></a>
     <br />
-    <!-- <br /> -->
-    <!-- <a href="#testing">View Demo</a> -->
-    <!-- · -->
     <a href="https://github.com/tuda-parallel/NORC/issues">Report Bug</a>
     ·
     <a href="https://github.com/tuda-parallel/NORC/issues">Request Feature</a>
