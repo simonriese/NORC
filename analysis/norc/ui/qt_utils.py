@@ -1,9 +1,14 @@
-# This file is part of the NORC software
-#
-# Copyright (c) 2024-2025, Technical University of Darmstadt, Germany
-#
-# This software may be modified and distributed under the terms of a BSD-style license.
-# See the LICENSE file in the base directory for details.
+"""
+User interface utilities for the NORC analysis tool.
+
+Copyright (c) 2026 TU Darmstadt, Germany
+Version: v0.2
+Date: 2025-08-08
+
+Licensed under the BSD 3-Clause License.
+For more information, see the LICENSE file in the project root:
+https://github.com/tuda-parallel/NORC/blob/main/LICENSE
+"""
 
 from PySide6.QtWidgets import QComboBox, QTableWidget
 
@@ -13,7 +18,7 @@ def update_choices(cb: QComboBox, choices):
     prev_choice = cb.currentText()
 
     cb.clear()
-    cb.addItems(sorted(list(choices)))
+    cb.addItems(sorted(choices))
 
     idx = cb.findText(prev_choice)
     if idx >= 0:

@@ -1,24 +1,30 @@
-# This file is part of the NORC software
-#
-# Copyright (c) 2024-2025, Technical University of Darmstadt, Germany
-#
-# This software may be modified and distributed under the terms of a BSD-style license.
-# See the LICENSE file in the base directory for details.
+"""
+Manager for coordinating the generation and display of analysis plots.
 
-import cProfile
+Copyright (c) 2026 TU Darmstadt, Germany
+Version: v0.2
+Date: 2025-08-08
+
+Licensed under the BSD 3-Clause License.
+For more information, see the LICENSE file in the project root:
+https://github.com/tuda-parallel/NORC/blob/main/LICENSE
+"""
+
+import concurrent.futures
 import os
 from copy import copy
 from threading import Lock
-import concurrent.futures
-from multiprocessing.pool import ThreadPool
-import numpy as np
-import time
 
 from PySide6.QtCore import QObject, Signal
 
 import norc.core.plot_rel_dev as prd
 from norc.core.score import score, score_group
-from norc.helpers.util import measurement_info, available_measurements, experiment_filter, warn
+from norc.helpers.util import (
+    available_measurements,
+    experiment_filter,
+    measurement_info,
+    warn,
+)
 
 
 class PlotManager(QObject):
@@ -174,7 +180,6 @@ class PlotManager(QObject):
             if config_version != self.config_version_:
                 return
 
-        t_start = time.process_time()
         # Calculate the plot for the given plot info
         result = prd.prepare_plot(self.plot_settings, info)
 
@@ -187,8 +192,6 @@ class PlotManager(QObject):
                     del self.pending_plots_[key]
 
                 self.result_ready.emit(info)
-        t_end = time.process_time()
-        # print(f"plot  {info.key()}\t done in {t_end - t_start}s")
 
     def score_calculation_(self, info: measurement_info, config_version):
         # Only start a calculation if the results would still be up to date.
@@ -200,8 +203,6 @@ class PlotManager(QObject):
             # Score request for NO_NOISE rejected. Scores are always for a noisy/reference pair.
             return
 
-        t_start = time.process_time()
-
         scr = score(info, self.infos[info.noiseless_key()], self.plot_settings.selection)
 
         # Only write the result if it still fits the configuration.
@@ -212,9 +213,6 @@ class PlotManager(QObject):
                 if key in self.pending_scores_:
                     del self.pending_scores_[key]
                 self.score_ready.emit(info)
-
-        t_end = time.process_time()
-        # print(f"score {info.key()}\t done in {t_end - t_start}s")
 
     def request_calculation_(
         self,
@@ -235,10 +233,7 @@ class PlotManager(QObject):
         info = self.infos[key]
 
         def is_pending(key):
-            for p in pending_in:
-                if key in p:
-                    return True
-            return False
+            return any(key in p for p in pending_in)
 
         noisy = None
         reference = None

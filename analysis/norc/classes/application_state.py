@@ -1,11 +1,17 @@
-# This file is part of the NORC software
-#
-# Copyright (c) 2025, Technical University of Darmstadt, Germany
-#
-# This software may be modified and distributed under the terms of a BSD-style license.
-# See the LICENSE file in the base directory for details.
+"""
+Global state management for the analysis application.
+
+Copyright (c) 2026 TU Darmstadt, Germany
+Version: v0.2
+Date: 2025-08-08
+
+Licensed under the BSD 3-Clause License.
+For more information, see the LICENSE file in the project root:
+https://github.com/tuda-parallel/NORC/blob/main/LICENSE
+"""
 
 import os
+
 from norc.core.plotmanager import PlotManager
 
 

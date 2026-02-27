@@ -104,7 +104,7 @@ Instructions for analyzing the results are provided [here](analysis/README.md).
 
 ## Contributing
 
-Kindly see the instructions provided under [docs/contributing.md](/docs/contributing.md).
+Kindly see the instructions provided under [doc/students_contribute.md](https://github.com/tuda-parallel/NORC/blob/development/doc/students_contribute.md).
 
 ## Contact
 

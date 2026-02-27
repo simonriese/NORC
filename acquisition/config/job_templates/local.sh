@@ -1,12 +1,12 @@
-
-#SBATCH --job-name=hwc-noise-test(§benchmark)
-#SBATCH --output=§status_out/%A.out
-#SBATCH --error=§status_err/%A.err
-#SBATCH --nodes §nodes
-#SBATCH --ntasks-per-node §total_tasks
-#SBATCH --exclusive
-#SBATCH --time=§time
-
+# Data acquisition script for local.sh in the NORC performance measurement pipeline.
+#
+# Copyright (c) 2026 TU Darmstadt, Germany
+# Version: v0.2
+# Date: 2025-08-08
+#
+# Licensed under the BSD 3-Clause License.
+# For more information, see the LICENSE file in the project root:
+# https://github.com/tuda-parallel/NORC/blob/main/LICENSE
 trap "killall -u $(whoami) -v -w NOIGENA 2> /dev/null" EXIT
 
 current_noise_pattern="NO_NOISE"

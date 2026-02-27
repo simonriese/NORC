@@ -1,8 +1,13 @@
 #!/bin/bash
-
-# This needs to be sourced to have any effect
-
-# Spack doesn't require building so it can just be cloned into the build directory
+# Data acquisition script for install_spack.sh in the NORC performance measurement pipeline.
+#
+# Copyright (c) 2026 TU Darmstadt, Germany
+# Version: v0.2
+# Date: 2025-08-08
+#
+# Licensed under the BSD 3-Clause License.
+# For more information, see the LICENSE file in the project root:
+# https://github.com/tuda-parallel/NORC/blob/main/LICENSE
 pushd "$INSTALL_DIR"
 
 if [ ! -d "spack" ]; then
