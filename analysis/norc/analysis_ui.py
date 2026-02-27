@@ -1,14 +1,21 @@
-# This file is part of the NORC software
-#
-# Copyright (c) 2025, Technical University of Darmstadt, Germany
-#
-# This software may be modified and distributed under the terms of a BSD-style license.
-# See the LICENSE file in the base directory for details.
+"""
+Entry point for the NORC analysis graphical user interface.
+
+Copyright (c) 2026 TU Darmstadt, Germany
+Version: v0.2
+Date: 2025-08-08
+
+Licensed under the BSD 3-Clause License.
+For more information, see the LICENSE file in the project root:
+https://github.com/tuda-parallel/NORC/blob/main/LICENSE
+"""
 
 import sys
-from PySide6.QtWidgets import QApplication
-from PySide6.QtUiTools import QUiLoader
+
 from PySide6.QtGui import QColor
+from PySide6.QtUiTools import QUiLoader
+from PySide6.QtWidgets import QApplication
+
 from norc.classes.application_state import ApplicationState
 from norc.ui.mainwindow import main_window
 
@@ -23,7 +30,7 @@ def main() -> None:
     if len(sys.argv) > 1:
         appstate.plt_mgr.open_experiment(sys.argv[1])
 
-    mw = main_window(appstate)
+    main_window(appstate)
 
     app.exec()
 

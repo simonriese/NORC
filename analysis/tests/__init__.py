@@ -1,9 +1,9 @@
 """
-User interface component for the __init__.py part of the NORC analysis tool.
+Core analysis module for __init__.py in the NORC toolkit.
 
 Copyright (c) 2026 TU Darmstadt, Germany
 Version: v0.2
-Date: 2025-08-08
+Date: 2026-02-27
 
 Licensed under the BSD 3-Clause License.
 For more information, see the LICENSE file in the project root:

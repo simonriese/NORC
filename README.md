@@ -104,7 +104,11 @@ Instructions for analyzing the results are provided [here](analysis/README.md).
 
 ## Contributing
 
-Kindly see the instructions provided under [docs/contributing.md](/docs/contributing.md).
+We welcome contributions from everyone! Please see our general [CONTRIBUTING.md](CONTRIBUTING.md) for instructions on how to get started.
+
+If you are a **student** (e.g., working on a thesis), please refer to our specialized [Student Contribution Guide](doc/students_contribute.md).
+
+**Important:** All development should target the **`development`** branch.
 
 ## Contact
 

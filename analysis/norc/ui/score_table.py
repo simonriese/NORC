@@ -1,25 +1,28 @@
-# This file is part of the NORC software
-#
-# Copyright (c) 2024-2025, Technical University of Darmstadt, Germany
-#
-# This software may be modified and distributed under the terms of a BSD-style license.
-# See the LICENSE file in the base directory for details.
+"""
+Table component for displaying numerical scores and metrics.
 
+Copyright (c) 2026 TU Darmstadt, Germany
+Version: v0.2
+Date: 2025-08-08
+
+Licensed under the BSD 3-Clause License.
+For more information, see the LICENSE file in the project root:
+https://github.com/tuda-parallel/NORC/blob/main/LICENSE
+"""
+
+import numpy as np
+from PySide6.QtCore import Signal
+from PySide6.QtGui import QColor
 from PySide6.QtWidgets import (
+    QHeaderView,
     QTableWidget,
     QTableWidgetItem,
-    QHeaderView,
 )
-from PySide6.QtGui import QColor
-from PySide6.QtCore import Signal
-
-import matplotlib
-import numpy as np
 
 import norc.helpers.util as util
-from norc.ui.ui_util import score_color
 from norc.core.plotmanager import PlotManager
 from norc.ui.qt_utils import table_dimensions
+from norc.ui.ui_util import score_color
 
 
 class score_cell(QTableWidgetItem):

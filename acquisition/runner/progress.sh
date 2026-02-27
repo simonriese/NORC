@@ -1,8 +1,13 @@
 #!/bin/bash
-#Author: Ahmad Tarraf
-#Date  : 14.Aug.2022
-#title : Load bar
-
+# Data acquisition script for progress.sh in the NORC performance measurement pipeline.
+#
+# Copyright (c) 2026 TU Darmstadt, Germany
+# Version: v0.2
+# Date: 2025-08-08
+#
+# Licensed under the BSD 3-Clause License.
+# For more information, see the LICENSE file in the project root:
+# https://github.com/tuda-parallel/NORC/blob/main/LICENSE
 SC="\033[s"  #Save cursor position
 RC="\033[u"  #Restore cursor position
 SA="\033[1A" #  Move the cursor up N lines: \033[<N>A

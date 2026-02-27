@@ -1,16 +1,21 @@
-# This file is part of the NORC software
-#
-# Copyright (c) 2024-2025, Technical University of Darmstadt, Germany
-#
-# This software may be modified and distributed under the terms of a BSD-style license.
-# See the LICENSE file in the base directory for details.
+"""
+Implementation of the ratings and rankings tab in the GUI.
 
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QSplitter
+Copyright (c) 2026 TU Darmstadt, Germany
+Version: v0.2
+Date: 2025-08-08
+
+Licensed under the BSD 3-Clause License.
+For more information, see the LICENSE file in the project root:
+https://github.com/tuda-parallel/NORC/blob/main/LICENSE
+"""
+
 from PySide6.QtGui import Qt
+from PySide6.QtWidgets import QSplitter, QVBoxLayout, QWidget
 
-from norc.ui.score_table import score_table
-from norc.ui.dimension_picker import dimension_picker
 from norc.ui.chart import chart
+from norc.ui.dimension_picker import dimension_picker
+from norc.ui.score_table import score_table
 
 
 class ratings_tab(QWidget):

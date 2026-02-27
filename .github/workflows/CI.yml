@@ -23,7 +23,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: '3.11'
 
       - name: Install NORC and dependencies
         run: |
@@ -31,12 +31,16 @@ jobs:
           python -m venv .venv
           source .venv/bin/activate
           pip install --upgrade pip
-          pip install . 
+          pip install -e ".[development-libs]"
 
+      - name: Lint with ruff
+        run: |
+          cd analysis
+          source .venv/bin/activate
+          make lint
 
-#      - name: Test NORC
-#        run: |
-#          source .venv/bin/activate  # Just activate the existing .venv
-#          cd test
-#          python3 -m pytest
-#          rm -rf io_results __pycache__ *.json*
+      - name: Test with pytest
+        run: |
+          cd analysis
+          source .venv/bin/activate
+          make test
