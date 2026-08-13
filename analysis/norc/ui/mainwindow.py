@@ -8,12 +8,13 @@
 import os
 from copy import copy
 
-from PySide6.QtWidgets import QFileDialog, QMessageBox, QMainWindow, QCheckBox
+from PySide6.QtWidgets import QFileDialog, QMessageBox, QMainWindow, QCheckBox, QTabWidget, QWidget
 from PySide6.QtCore import Qt
 
 from norc.helpers.util import experiment_filter, available_measurements
 from norc.ui.examine_tab import examine_tab
 from norc.ui.ratings_tab import ratings_tab
+from norc.ui.acquisition_tab import acquisition_tab
 from norc.core.analyze import analyze_experiment
 from norc.ui.ui_util import add_v_spacer, clear_widget
 
@@ -23,6 +24,21 @@ class main_window(QMainWindow):
         super().__init__()
         self.appstate = appstate
         self.ui = appstate.load_ui("mainwindow.ui")
+
+
+        # TODO proper refactor after prototyping ->
+        self.root_tabs = QTabWidget(self.ui)
+        analysis_tab = self.ui.takeCentralWidget()
+
+        self.acquisition_tab = QWidget()
+
+        self.root_tabs.addTab(acquisition_tab(appstate), "Acquisition")
+        self.root_tabs.addTab(analysis_tab, "Analysis")
+
+        self.ui.setCentralWidget(self.root_tabs)
+        # <- TODO proper refactor after prototyping
+
+
         self.ui.tw_modes.addTab(ratings_tab(appstate), "Ratings")
         self.ui.tw_modes.addTab(examine_tab(appstate), "Examine")
 
@@ -37,7 +53,8 @@ class main_window(QMainWindow):
         self.ui.sb_thr_contrib.editingFinished.connect(self.update_config)
         self.ui.sb_thr_visits.editingFinished.connect(self.update_config)
 
-        self.ui.action_open.triggered.connect(self.open_experiment_dialog)
+        self.ui.open_button.clicked.connect(self.open_experiment_dialog)
+        #self.ui.action_open.triggered.connect(self.open_experiment_dialog)
 
         # Grouping UI
         self.ui.cb_lump_benchmark.stateChanged.connect(self.update_config)
